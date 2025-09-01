@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<?xml version="1.0" encoding="UTF-8"?><!--
   ~ Copyright 2020 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +20,10 @@
     <!-- Permission declarations -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
 
     <!-- A camera with burst capability is required to use this application -->
@@ -30,21 +32,32 @@
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
-        android:label="@string/app_name"
         android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
         <activity
-            android:name="com.example.android.camerax.video.MainActivity"
+            android:name=".TestFFmpegActivity"
             android:clearTaskOnLaunch="true"
-            android:theme="@style/AppTheme"
-            android:exported="true">
-
-            <!-- Main app intent filter -->
+            android:exported="true"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.example.android.camerax.video.MainActivity"
+            android:clearTaskOnLaunch="true"
+            android:exported="true"
+            android:theme="@style/AppTheme">
+
+            <!-- Main app intent filter -->
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
 
         </activity>
 
@@ -56,7 +69,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
     </application>

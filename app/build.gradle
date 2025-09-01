@@ -20,12 +20,12 @@ apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs"
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
     defaultConfig {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        applicationId "com.android.example.camerax.video"
-        minSdkVersion 21
-        targetSdkVersion 31
+        applicationId "com.zandroid.example.camerax.video"
+        minSdkVersion 24
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0.0"
     }
@@ -107,4 +107,16 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:${camerax_version}"
     implementation "androidx.camera:camera-video:${camerax_version}"
     implementation "androidx.camera:camera-view:${camerax_version}"
+//    implementation 'com.github.microshow:RxFFmpeg:4.9.0'
+    implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
+
+//    implementation 'com.google.mlkit:language-id:17.0.5'
+
+//    implementation 'com.github.AbedElazizShe:LightCompressor:1.3.2'
+//    implementation 'com.github.AbedElazizShe:LightCompressor:1.3.2'
+//
+//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Version.coroutines}"
+//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Version.coroutines}"
+    implementation "com.googlecode.mp4parser:isoparser:1.0.6"
+
 }
