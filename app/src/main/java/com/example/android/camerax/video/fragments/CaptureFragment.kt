@@ -120,6 +120,7 @@ class CaptureFragment : Fragment() {
 
         val preview = Preview.Builder()
             .setTargetAspectRatio(quality.getAspectRatio(quality))
+
             .build().apply {
                 setSurfaceProvider(captureViewBinding.previewView.surfaceProvider)
             }
@@ -128,8 +129,12 @@ class CaptureFragment : Fragment() {
         //   - record video/audio to MediaStore(only shown here), File, ParcelFileDescriptor
         //   - be used create recording(s) (the recording performs recording)
         val recorder = Recorder.Builder()
+
             .setQualitySelector(qualitySelector)
+
             .build()
+
+
         videoCapture = VideoCapture.withOutput(recorder)
 
         try {

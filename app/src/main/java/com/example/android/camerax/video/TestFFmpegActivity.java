@@ -2,7 +2,9 @@ package com.example.android.camerax.video;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +17,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.daasuu.mp4compose.FillMode;
+import com.daasuu.mp4compose.composer.Mp4Composer;
+import com.example.android.camerax.video.grok.GrokMainActivity;
 import com.example.android.camerax.video.lightcompressorlibrary.CompressionListener;
 import com.example.android.camerax.video.lightcompressorlibrary.VideoCompressor;
 import com.example.android.camerax.video.lightcompressorlibrary.VideoQuality;
@@ -22,6 +27,7 @@ import com.example.android.camerax.video.lightcompressorlibrary.config.AppSpecif
 import com.example.android.camerax.video.lightcompressorlibrary.config.Configuration;
 import com.example.android.camerax.video.lightcompressorlibrary.config.SharedStorageConfiguration;
 import com.example.android.camerax.video.utils.VideoCompressorUtils;
+import com.example.video_compress.VideoCompressPlugin;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,18 +42,39 @@ public class TestFFmpegActivity extends AppCompatActivity {
 
     Button button;
 
-    Button compressMp4;
+    Button buttonCompressMp4V1;
+    Button buttonCompressMp4V2;
+    Button buttonCompressMp4V3;
+
+    Button buttonOpenCard;
+
     Button btn_permission;
     String TAG = "TestFFmpeg";
+    String permissionsSingle = Manifest.permission.READ_MEDIA_VIDEO;
+    ActivityResultLauncher activityResultSingle = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+        @Override
+        public void onActivityResult(Boolean result) {
 
+        }
+    });
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_testffmpeg);
         button = findViewById(R.id.button);
-        compressMp4 = findViewById(R.id.buttonCompressMp4);
+        buttonCompressMp4V1 = findViewById(R.id.buttonCompressMp4V1);
+        buttonCompressMp4V2 = findViewById(R.id.buttonCompressMp4V2);
+        buttonCompressMp4V3 = findViewById(R.id.buttonCompressMp4V3);
+        buttonOpenCard = findViewById(R.id.buttonOpenCard);
         btn_permission = findViewById(R.id.btn_permission);
+
+        int osVersionCode = Build.VERSION.SDK_INT;
+        String osVersionName = Build.VERSION.RELEASE;
+
+        Log.d("osVersionCode", osVersionName + "   " + osVersionCode);
+
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,13 +82,39 @@ public class TestFFmpegActivity extends AppCompatActivity {
 //                runFFmpegRxJava();
             }
         });
-        compressMp4.setOnClickListener(new View.OnClickListener() {
+
+        buttonCompressMp4V1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                runCompressMp4();
 //                runCompressMp3();
+//                runCompressMp41();
+                runCompressMp42();
+            }
+        });
 
+        buttonCompressMp4V2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 runCompressMp41();
+
+            }
+        });
+
+
+        buttonCompressMp4V3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                runCompressMp4V3();
+            }
+        });
+
+
+        buttonOpenCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TestFFmpegActivity.this, GrokMainActivity.class);
+                startActivity(intent);
             }
         });
         btn_permission.setOnClickListener(new View.OnClickListener() {
@@ -71,20 +124,39 @@ public class TestFFmpegActivity extends AppCompatActivity {
             }
         });
     }
-    String permissionsSingle = Manifest.permission.READ_MEDIA_VIDEO;
 
-    ActivityResultLauncher activityResultSingle = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
-        @Override
-        public void onActivityResult(Boolean result) {
-
-        }
-    });
-    private void onPermission(){
+    private void onPermission() {
         activityResultSingle.launch(permissionsSingle);
 
     }
 
+
+    private void runCompressMp42() {
+        /**
+         *
+         * https://pub.dev/packages/video_compress
+         * 根据这个修复bug ，如果不修复压缩之后没有声音
+         * https://github.com/jonataslaw/VideoCompress/pull/301
+         */
+//        new Thread() {
+//            @Override
+//            public void run() {
+//                super.run();
+//                File inputFile = new File(getExternalCacheDir().getAbsolutePath() + File.separator + "video" + File.separator + "input.mp4");
+//                VideoCompressPlugin.Companion.compressVideoV2(getApplicationContext(), inputFile.getAbsolutePath());
+//            }
+//        }.start();
+        File inputFile = new File(getExternalCacheDir().getAbsolutePath() + File.separator + "video" + File.separator + "input.mp4");
+        VideoCompressPlugin.Companion.compressVideoV2(getApplicationContext(), inputFile.getAbsolutePath());
+
+    }
+
     private void runCompressMp41() {
+        /**
+         *
+         *修复我们没有权限就能压缩的
+         *https://github.com/AbedElazizShe/LightCompressor
+         */
         File inputFile = new File(getExternalCacheDir().getAbsolutePath() + File.separator + "video" + File.separator + "input.mp4");
 
         if (!inputFile.exists()) {
@@ -243,4 +315,57 @@ public class TestFFmpegActivity extends AppCompatActivity {
     }
 
 
+    private void runCompressMp4V3() {
+        try {
+            File file = new File(getExternalCacheDir().getAbsolutePath() + File.separator + "video" + File.separator + "input.mp4");
+
+            if (null == file) {
+                return;
+            }
+            String cacheDirPath = getExternalCacheDir().getAbsolutePath(); // 临时或缓存文件
+            File outPut = new File(cacheDirPath + "output.mp4");
+            new Mp4Composer(file.getAbsolutePath(), outPut.getAbsolutePath())
+//                    .rotation(Rotation.ROTATION_90)
+                    .size(160, 340).fillMode(FillMode.PRESERVE_ASPECT_FIT)
+//                    .filter(new GlFilterGroup(new GlMonochromeFilter(), new GlVignetteFilter()))
+//                    .filter(new GlFilterGroup(new GlWatermarkFilter()))
+//                    .trim(200, 5000)
+                    .listener(new Mp4Composer.Listener() {
+                        @Override
+                        public void onProgress(double progress) {
+                            Log.d(TAG, "onProgress = " + progress);
+//                            runOnUiThread(() -> {
+//                                showProgressLoading(progress);
+//                            });
+                        }
+
+                        @Override
+                        public void onCurrentWrittenVideoTime(long timeUs) {
+
+                        }
+
+                        @Override
+                        public void onCompleted() {
+                            Log.d(TAG, "onCompleted()");
+                            runOnUiThread(() -> {
+
+                            });
+
+                        }
+
+                        @Override
+                        public void onCanceled() {
+                            Log.d(TAG, "onCanceled");
+                        }
+
+                        @Override
+                        public void onFailed(Exception exception) {
+                            Log.e(TAG, "onFailed()", exception);
+                        }
+                    }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }

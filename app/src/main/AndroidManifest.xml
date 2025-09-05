@@ -47,6 +47,18 @@
             </intent-filter>
         </activity>
 
+
+        <activity
+            android:name="com.example.android.camerax.video.grok.GrokMainActivity"
+            android:clearTaskOnLaunch="true"
+            android:exported="true"
+            android:theme="@style/AppTheme">
+
+            <!-- Main app intent filter -->
+
+
+        </activity>
+
         <activity
             android:name="com.example.android.camerax.video.MainActivity"
             android:clearTaskOnLaunch="true"

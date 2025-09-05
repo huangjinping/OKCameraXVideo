@@ -15,16 +15,31 @@
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
-
-
-
-
+        android:text="保存视频" />
 
 
     <Button
-        android:id="@+id/buttonCompressMp4"
+        android:id="@+id/buttonCompressMp4V1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="compressMp4" />
+        android:text="compressMp4V1" />
+
+    <Button
+        android:id="@+id/buttonCompressMp4V2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="compressMp4V2" />
+
+    <Button
+        android:id="@+id/buttonCompressMp4V3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="compressMp4V3" />
+
+
+    <Button
+        android:id="@+id/buttonOpenCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="打开录制页面" />
 </LinearLayout>
