@@ -46,6 +46,7 @@ public class TestFFmpegActivity extends AppCompatActivity {
     Button buttonCompressMp4V2;
     Button buttonCompressMp4V3;
 
+    Button buttonOpenBase;
     Button buttonOpenCard;
 
     Button btn_permission;
@@ -68,6 +69,7 @@ public class TestFFmpegActivity extends AppCompatActivity {
         buttonCompressMp4V3 = findViewById(R.id.buttonCompressMp4V3);
         buttonOpenCard = findViewById(R.id.buttonOpenCard);
         btn_permission = findViewById(R.id.btn_permission);
+        buttonOpenBase = findViewById(R.id.buttonOpenBase);
 
         int osVersionCode = Build.VERSION.SDK_INT;
         String osVersionName = Build.VERSION.RELEASE;
@@ -110,17 +112,28 @@ public class TestFFmpegActivity extends AppCompatActivity {
         });
 
 
-        buttonOpenCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TestFFmpegActivity.this, GrokMainActivity.class);
-                startActivity(intent);
-            }
-        });
         btn_permission.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onPermission();
+            }
+        });
+
+        buttonOpenCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TestFFmpegActivity.this, GrokMainActivity.class);
+
+                startActivity(intent);
+            }
+        });
+
+        buttonOpenBase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TestFFmpegActivity.this, MainActivity.class);
+
+                startActivity(intent);
             }
         });
     }
@@ -146,6 +159,8 @@ public class TestFFmpegActivity extends AppCompatActivity {
 //                VideoCompressPlugin.Companion.compressVideoV2(getApplicationContext(), inputFile.getAbsolutePath());
 //            }
 //        }.start();
+        Toast.makeText(this, "dishiehd", Toast.LENGTH_SHORT).show();
+
         File inputFile = new File(getExternalCacheDir().getAbsolutePath() + File.separator + "video" + File.separator + "input.mp4");
         VideoCompressPlugin.Companion.compressVideoV2(getApplicationContext(), inputFile.getAbsolutePath());
 

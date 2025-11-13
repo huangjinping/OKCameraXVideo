@@ -42,4 +42,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="打开录制页面" />
+
+    <Button
+        android:id="@+id/buttonOpenBase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="打开录制页面2" />
 </LinearLayout>
