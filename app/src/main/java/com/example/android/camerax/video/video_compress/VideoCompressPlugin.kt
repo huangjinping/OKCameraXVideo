@@ -1,8 +1,11 @@
 package com.example.video_compress
 
+import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
+import com.example.android.camerax.video.VideoViewerActivity
 import com.otaliastudios.transcoder.Transcoder
 import com.otaliastudios.transcoder.TranscoderListener
 import com.otaliastudios.transcoder.source.TrimDataSource
@@ -30,7 +33,7 @@ class VideoCompressPlugin {
             )
         }
 
-        fun compressVideoV2(context: Context, path1: String) {
+        fun compressVideoV2(context: Activity, path1: String) {
             var transcodeFuture: Future<Void>? = null
             val path = path1;
             val quality = 1
@@ -40,7 +43,7 @@ class VideoCompressPlugin {
             val includeAudio = true
             val frameRate = 30
             val tempDir: String = context!!.getExternalFilesDir("video_compress")!!.absolutePath
-            val out = SimpleDateFormat("yyyy-MM-dd hh-mm-ss").format(Date())
+            val out = SimpleDateFormat("yyyy-MM-dd_hh-mm-ss").format(Date())
             val destPath: String =
                 tempDir + File.separator + "VID_" + out + path.hashCode() + ".mp4"
             var videoTrackStrategy: TrackStrategy = DefaultVideoStrategy.atMost(340).build();
@@ -131,6 +134,13 @@ class VideoCompressPlugin {
 //                        json.put("isCancel", false)
 //                        result.success(json.toString())
                         Log.d("vies", "=onTranscodeCompleted====" + destPath);
+
+                        context.runOnUiThread {
+                            Toast.makeText(context, "v2 " + destPath, Toast.LENGTH_SHORT).show()
+
+                            VideoViewerActivity.startAction(context, destPath)
+
+                        }
                         if (deleteOrigin) {
                             File(path).delete()
                         }

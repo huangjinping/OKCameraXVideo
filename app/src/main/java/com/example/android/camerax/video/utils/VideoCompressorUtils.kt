@@ -1,9 +1,11 @@
 package com.example.android.camerax.video.utils
 
-import android.content.Context
+import android.app.Activity
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.core.net.toUri
+import com.example.android.camerax.video.VideoViewerActivity
 import com.example.android.camerax.video.lightcompressorlibrary.CompressionListener
 import com.example.android.camerax.video.lightcompressorlibrary.VideoCompressor
 import com.example.android.camerax.video.lightcompressorlibrary.VideoQuality
@@ -17,12 +19,12 @@ class VideoCompressorUtils {
     companion object {
         var TAG = "VCompressor";
 
-        fun onCompressorVideo(context: Context, path: String) {
+        fun onCompressorVideo(context: Activity, path: String) {
 
             Log.d(TAG, "-------onCompressorVideo-------" + path)
 
             val uris = mutableListOf<Uri>()
-            var rui = path.toUri()
+//            var rui = path.toUri()
             uris.add(path.toUri())
             VideoCompressor.start(
                 context = context, // => This is required
@@ -73,12 +75,20 @@ class VideoCompressorUtils {
                             TAG,
                             "-------onSuccess-------" + index + "=========" + size + "==========" + path
                         )
+                        context.runOnUiThread {
+                            Toast.makeText(context, "" + path, Toast.LENGTH_SHORT).show()
+
+                            VideoViewerActivity.startAction(context, path!!)
+                        }
+
+
 
                     }
 
                     override fun onFailure(index: Int, failureMessage: String) {
                         // On Failure
                         print("-------onFailure-------" + index + "=========" + failureMessage)
+
                         Log.d(TAG, "-------onFailure-------" + index + "=========" + failureMessage)
 
                     }
@@ -86,7 +96,6 @@ class VideoCompressorUtils {
                     override fun onCancelled(index: Int) {
                         // On Cancelled
                         print("-------onCancelled-------" + index)
-
                         Log.d(TAG, "-------onCancelled-------" + index)
                     }
 

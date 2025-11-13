@@ -34,10 +34,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import io.microshow.rxffmpeg.RxFFmpegInvoke;
-import io.microshow.rxffmpeg.RxFFmpegProgress;
-import io.reactivex.functions.Consumer;
-
 public class TestFFmpegActivity extends AppCompatActivity {
 
     Button button;
@@ -90,15 +86,14 @@ public class TestFFmpegActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                runCompressMp4();
 //                runCompressMp3();
-//                runCompressMp41();
-                runCompressMp42();
+                runCompressMp41();
             }
         });
 
         buttonCompressMp4V2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                runCompressMp41();
+                runCompressMp42();
 
             }
         });
@@ -145,12 +140,7 @@ public class TestFFmpegActivity extends AppCompatActivity {
 
 
     private void runCompressMp42() {
-        /**
-         *
-         * https://pub.dev/packages/video_compress
-         * 根据这个修复bug ，如果不修复压缩之后没有声音
-         * https://github.com/jonataslaw/VideoCompress/pull/301
-         */
+
 //        new Thread() {
 //            @Override
 //            public void run() {
@@ -159,25 +149,31 @@ public class TestFFmpegActivity extends AppCompatActivity {
 //                VideoCompressPlugin.Companion.compressVideoV2(getApplicationContext(), inputFile.getAbsolutePath());
 //            }
 //        }.start();
-        Toast.makeText(this, "dishiehd", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "dishiehd", Toast.LENGTH_SHORT).show();
 
         File inputFile = new File(getExternalCacheDir().getAbsolutePath() + File.separator + "video" + File.separator + "input.mp4");
-        VideoCompressPlugin.Companion.compressVideoV2(getApplicationContext(), inputFile.getAbsolutePath());
+        if (!inputFile.exists()) {
+            Toast.makeText(this, "先点击保存视频", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        VideoCompressPlugin.Companion.compressVideoV2(this, inputFile.getAbsolutePath());
 
     }
 
     private void runCompressMp41() {
-        /**
-         *
-         *修复我们没有权限就能压缩的
-         *https://github.com/AbedElazizShe/LightCompressor
-         */
+
         File inputFile = new File(getExternalCacheDir().getAbsolutePath() + File.separator + "video" + File.separator + "input.mp4");
 
         if (!inputFile.exists()) {
+            Toast.makeText(this, "先点击保存视频", Toast.LENGTH_SHORT).show();
             return;
         }
-        VideoCompressorUtils.Companion.onCompressorVideo(getApplicationContext(), inputFile.getAbsolutePath());
+//        VideoViewerActivity.Companion.startAction(this, inputFile.getAbsolutePath());
+//        VideoViewerActivity.Companion.startAction(this, "dddd");
+//        if (!inputFile.exists()) {
+//            return;
+//        }
+        VideoCompressorUtils.Companion.onCompressorVideo(this, inputFile.getAbsolutePath());
     }
 
 
@@ -276,19 +272,19 @@ public class TestFFmpegActivity extends AppCompatActivity {
     }
 
     private void runCompressMp4() {
-        File file = new File(getExternalCacheDir().getAbsolutePath() + File.separator + "video" + File.separator + "input.mp4");
-        Log.d("sss1", "===" + file.getAbsolutePath());
-        File outPut = new File(getExternalCacheDir().getAbsolutePath() + File.separator + "video" + File.separator + "output.mp4");
-        String text = "ffmpeg -i " + file.getAbsolutePath() + " -codec:v libx264 -crf 30 -preset medium " + outPut;
-        text = "ffmpeg -i " + file.getAbsolutePath() + " -vf scale=640:360 " + outPut;
-        String[] commands = text.split(" ");
-        //开始执行FFmpeg命令
-        RxFFmpegInvoke.getInstance().runCommandRxJava(commands).subscribe(new Consumer<RxFFmpegProgress>() {
-            @Override
-            public void accept(RxFFmpegProgress rxFFmpegProgress) throws Exception {
-
-            }
-        });
+//        File file = new File(getExternalCacheDir().getAbsolutePath() + File.separator + "video" + File.separator + "input.mp4");
+//        Log.d("sss1", "===" + file.getAbsolutePath());
+//        File outPut = new File(getExternalCacheDir().getAbsolutePath() + File.separator + "video" + File.separator + "output.mp4");
+//        String text = "ffmpeg -i " + file.getAbsolutePath() + " -codec:v libx264 -crf 30 -preset medium " + outPut;
+//        text = "ffmpeg -i " + file.getAbsolutePath() + " -vf scale=640:360 " + outPut;
+//        String[] commands = text.split(" ");
+//        //开始执行FFmpeg命令
+//        RxFFmpegInvoke.getInstance().runCommandRxJava(commands).subscribe(new Consumer<RxFFmpegProgress>() {
+//            @Override
+//            public void accept(RxFFmpegProgress rxFFmpegProgress) throws Exception {
+//
+//            }
+//        });
 
     }
 
@@ -334,6 +330,10 @@ public class TestFFmpegActivity extends AppCompatActivity {
         try {
             File file = new File(getExternalCacheDir().getAbsolutePath() + File.separator + "video" + File.separator + "input.mp4");
 
+            if (!file.exists()) {
+                Toast.makeText(this, "先点击保存视频", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (null == file) {
                 return;
             }
@@ -363,6 +363,7 @@ public class TestFFmpegActivity extends AppCompatActivity {
                         public void onCompleted() {
                             Log.d(TAG, "onCompleted()");
                             runOnUiThread(() -> {
+                                VideoViewerActivity.Companion.startAction(TestFFmpegActivity.this, outPut.getAbsolutePath());
 
                             });
 

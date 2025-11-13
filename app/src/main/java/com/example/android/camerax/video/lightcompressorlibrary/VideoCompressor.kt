@@ -106,12 +106,6 @@ object VideoCompressor : CoroutineScope by MainScope() {
         for (i in uris.indices) {
 
             job = launch(Dispatchers.IO) {
-
-//                val job = async { getMediaPath(context, uris[i]) }
-//                val path = job.await()
-//                val path =
-//                    "/storage/emulated/0/Android/data/com.zandroid.example.camerax.video/cache/video/input.mp4";
-
                 val path = uris[i].path
                 val desFile = saveVideoFile(
                     context,
@@ -148,17 +142,7 @@ object VideoCompressor : CoroutineScope by MainScope() {
 
                     // Runs in Main(UI) Thread
                     if (result.success) {
-                        val savedFile = saveVideoFile(
-                            context,
-                            result.path,
-                            sharedStorageConfiguration,
-                            appSpecificStorageConfiguration,
-                            isStreamable,
-                            configuration.videoNames[i],
-                            shouldSave = true
-                        )
-
-                        listener.onSuccess(i, result.size, savedFile?.path)
+                        listener.onSuccess(i, result.size, desFile?.path)
                     } else {
                         listener.onFailure(i, result.failureMessage ?: "An error has occurred!")
                     }
@@ -207,7 +191,7 @@ object VideoCompressor : CoroutineScope by MainScope() {
         if (context.externalCacheDir != null) {
             // 输入视频路径（示例：从存储中选择视频）
             val inputFile: File =
-                File(context.externalCacheDir!!.absolutePath + File.separator + System.currentTimeMillis() + "output.mp4")
+                File(context.externalCacheDir!!.absolutePath + File.separator + System.currentTimeMillis() + "_c_output.mp4")
             return inputFile;
         }
         return null;

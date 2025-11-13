@@ -42,7 +42,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -115,7 +115,9 @@ dependencies {
     implementation "androidx.camera:camera-video:${camerax_version}"
     implementation "androidx.camera:camera-view:${camerax_version}"
 //    implementation 'com.github.microshow:RxFFmpeg:4.9.0'
-    implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
+
+
+//    implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
 
 //    implementation 'com.google.mlkit:language-id:17.0.5'
 
